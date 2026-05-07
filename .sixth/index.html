@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Rwanda Volcanoes Explorer</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>tailwind.config={darkMode:'class'}</script>
+</head>
+<body class="bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+<nav class="bg-green-800 text-white sticky top-0 z-50">
+  <div class="max-w-5xl mx-auto px-4 flex items-center justify-between flex-wrap">
+    <span class="font-bold text-lg py-3">🌋 Rwanda Volcanoes</span>
+    <button id="hamburger" class="md:hidden flex flex-col gap-1 py-3 px-2 focus:outline-none">
+      <span class="block w-6 h-0.5 bg-white"></span>
+      <span class="block w-6 h-0.5 bg-white"></span>
+      <span class="block w-6 h-0.5 bg-white"></span>
+    </button>
+    <ul id="nav-links" class="hidden md:flex flex-col md:flex-row w-full md:w-auto list-none">
+      <li><a href="#about" class="nav-link block px-4 py-3 hover:bg-green-900 transition">Home</a></li>
+      <li><a href="#text-section" class="nav-link block px-4 py-3 hover:bg-green-900 transition">About</a></li>
+      <li class="relative group">
+        <a href="#" id="dropdown-toggle" class="nav-link block px-4 py-3 hover:bg-green-900 transition cursor-pointer">Volcanoes ▾</a>
+        <ul id="dropdown-menu" class="hidden md:group-hover:block absolute top-full left-0 bg-green-900 min-w-[160px] z-50 list-none border-t-2 border-green-400">
+          <li><a href="#cards-section" class="block px-4 py-2 hover:bg-green-800 text-sm">Virunga Range</a></li>
+          <li><a href="#list-section" class="block px-4 py-2 hover:bg-green-800 text-sm">Activity List</a></li>
+          <li><a href="#search-section" class="block px-4 py-2 hover:bg-green-800 text-sm">Search</a></li>
+        </ul>
+      </li>
+      <li><a href="#cards-section" class="nav-link block px-4 py-3 hover:bg-green-900 transition">Activities</a></li>
+      <li><a href="#contact" class="nav-link block px-4 py-3 hover:bg-green-900 transition">Contact</a></li>
+    </ul>
+    <button id="theme-toggle" class="bg-green-600 hover:bg-green-500 text-white text-sm px-3 py-1.5 rounded my-2 md:my-0 transition">🌙 Dark Mode</button>
+  </div>
+</nav>
+
+<main class="max-w-5xl mx-auto px-4 py-8 space-y-12">
+
+  <section id="about">
+    <h2 class="text-2xl font-semibold text-green-800 dark:text-green-400 mb-3">Welcome to Rwanda Volcanoes Explorer</h2>
+    <div id="paragraph-text" class="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg p-4 text-base mb-3">
+      Rwanda is home to the magnificent Virunga Massif — a chain of ancient volcanoes straddling the borders of Rwanda, Uganda, and the DRC. This extraordinary region is one of Africa's most breathtaking natural wonders.
+    </div>
+    <button id="change-text-btn" class="bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded transition text-sm">Change Fact</button>
+  </section>
+
+  <section id="text-section">
+    <h2 class="text-2xl font-semibold text-green-800 dark:text-green-400 mb-3">Share Your Volcano Comment</h2>
+    <div class="flex flex-wrap gap-2 mb-2">
+      <input type="text" id="user-input" placeholder="Type something about volcanoes..."
+        class="flex-1 min-w-[200px] border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"/>
+      <button id="display-btn" class="bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded text-sm transition">Display</button>
+    </div>
+    <div id="display-output" class="bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded px-4 py-2 text-sm min-h-[36px]">
+      Your input will appear here.
+    </div>
+  </section>
+
+  <section id="list-section">
+    <h2 class="text-2xl font-semibold text-green-800 dark:text-green-400 mb-3">Volcano Activity Log</h2>
+    <div class="flex flex-wrap gap-2 mb-3">
+      <input type="text" id="list-input" placeholder="Add a volcano or activity..."
+        class="flex-1 min-w-[200px] border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500"/>
+      <button id="add-btn" class="bg-green-800 hover:bg-green-900 text-white px-4 py-2 rounded text-sm transition">Add</button>
+    </div>
+    <div id="search-section" class="mb-3">
+      <input type="text" id="search-bar" placeholder="🔍 Search list items..."
+        class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-sm bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-green-500 mb-1"/>
+      <div id="search-count" class="text-xs text-gray-400"></div>
+    </div>
+    <ul id="item-list" class="space-y-2"></ul>
+    <p class="text-xs text-gray-400 mt-2">Only items you add manually or from cards can be removed.</p>
+  </section>
+
+  <section id="cards-section">
+    <h2 class="text-2xl font-semibold text-green-800 dark:text-green-400 mb-4">Explore Volcano Activities</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-700 rounded-xl p-4 flex flex-col gap-2">
+        <h3 class="font-semibold text-green-900 dark:text-green-300">🦍 Gorilla Trekking</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 flex-1">Trek through the misty slopes of the Virunga volcanoes to encounter endangered mountain gorillas.</p>
+        <button onclick="addActivity('Gorilla Trekking — Virunga')" class="self-start bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1.5 rounded transition">Join</button>
+      </div>
+      <div class="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-700 rounded-xl p-4 flex flex-col gap-2">
+        <h3 class="font-semibold text-green-900 dark:text-green-300">🌋 Mount Karisimbi Hike</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 flex-1">Summit the highest volcano in the Virunga chain at 4,507m through bamboo forests and alpine meadows.</p>
+        <button onclick="addActivity('Summit Karisimbi (4,507m)')" class="self-start bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1.5 rounded transition">Select</button>
+      </div>
+      <div class="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-700 rounded-xl p-4 flex flex-col gap-2">
+        <h3 class="font-semibold text-green-900 dark:text-green-300">🐦 Nyiragongo View</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 flex-1">View the world's largest lava lake glowing from across the border — an unforgettable sight.</p>
+        <button onclick="addActivity('View Nyiragongo Lava Lake')" class="self-start bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1.5 rounded transition">Add</button>
+      </div>
+      <div class="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-700 rounded-xl p-4 flex flex-col gap-2">
+        <h3 class="font-semibold text-green-900 dark:text-green-300">🌿 Bisoke Crater Hike</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 flex-1">Hike to the stunning crater lake on Mount Bisoke through Volcanoes National Park.</p>
+        <button onclick="addActivity('Bisoke Crater Lake Hike')" class="self-start bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1.5 rounded transition">Join</button>
+      </div>
+      <div class="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-700 rounded-xl p-4 flex flex-col gap-2">
+        <h3 class="font-semibold text-green-900 dark:text-green-300">🔭 Astronomy Night</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 flex-1">Camp near Musanze and enjoy unobstructed stargazing under Africa's darkest skies near volcanic peaks.</p>
+        <button onclick="addActivity('Astronomy Night near Musanze')" class="self-start bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1.5 rounded transition">Add</button>
+      </div>
+      <div class="bg-white dark:bg-gray-800 border border-green-200 dark:border-green-700 rounded-xl p-4 flex flex-col gap-2">
+        <h3 class="font-semibold text-green-900 dark:text-green-300">🏘 Iby'Iwacu Village</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 flex-1">Visit the cultural village near Volcanoes National Park to learn about Rwandan heritage.</p>
+        <button onclick="addActivity('Cultural Village Visit — Iby\'Iwacu')" class="self-start bg-green-600 hover:bg-green-700 text-white text-sm px-3 py-1.5 rounded transition">Select</button>
+      </div>
+    </div>
+
+    <div class="mt-6 bg-green-50 dark:bg-green-900 border border-green-200 dark:border-green-700 rounded-lg p-4">
+      <h4 class="font-semibold text-green-800 dark:text-green-300 mb-2">✅ Selected Activities:</h4>
+      <ul id="selected-list" class="space-y-2"></ul>
+      <p id="selected-empty" class="text-xs text-gray-400 mt-1">No activities selected yet. Click Join / Select / Add on a card above.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contact" class="bg-green-800 text-white text-center py-4 text-sm mt-12">
+  <p>🌋 Rwanda Volcanoes Explorer &nbsp;|&nbsp; DOM Manipulation Project &nbsp;|&nbsp; Volcanoes National Park, Rwanda</p>
+</footer>
+
+<script>
+  const defaultItems = [
+    "Mount Karisimbi — 4,507m",
+    "Mount Bisoke — 3,711m",
+    "Mount Muhabura — 4,127m",
+    "Mount Gahinga — 3,474m",
+    "Mount Sabyinyo — 3,634m",
+  ];
+
+  const itemList = document.getElementById('item-list');
+  const selectedList = document.getElementById('selected-list');
+  const selectedEmpty = document.getElementById('selected-empty');
+
+  // LOCKED — no label, no badge, no icon, clean professional look
+  // pointer-events-none prevents any click interaction entirely
+  function createLockedItem(text) {
+    const li = document.createElement('li');
+    li.dataset.name = text.toLowerCase();
+    li.dataset.locked = 'true';
+    li.className = [
+      'flex justify-between items-center',
+      'bg-white dark:bg-gray-800',
+      'border border-gray-200 dark:border-gray-600',
+      'rounded px-3 py-2 text-sm',
+      'pointer-events-none select-none',
+    ].join(' ');
+    li.innerHTML = `<span class="text-gray-800 dark:text-gray-200 font-medium">${text}</span>`;
+    return li;
+  }
+
+  // REMOVABLE — user added, green border, red remove button
+  function createRemovableItem(text) {
+    const li = document.createElement('li');
+    li.dataset.name = text.toLowerCase();
+    li.dataset.locked = 'false';
+    li.className = [
+      'flex justify-between items-center',
+      'bg-white dark:bg-gray-800',
+      'border border-green-300 dark:border-green-600',
+      'rounded px-3 py-2 text-sm',
+    ].join(' ');
+
+    const span = document.createElement('span');
+    span.textContent = text;
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Remove';
+    btn.className = 'text-xs text-white bg-red-500 hover:bg-red-600 px-2 py-0.5 rounded transition ml-2 flex-shrink-0';
+    btn.addEventListener('click', () => { li.remove(); updateCount(); });
+
+    li.appendChild(span);
+    li.appendChild(btn);
+    return li;
+  }
+
+  // SELECTED — inside Selected Activities box
+  function createSelectedItem(text) {
+    const li = document.createElement('li');
+    li.className = [
+      'flex justify-between items-center',
+      'bg-white dark:bg-gray-700',
+      'border border-green-300 dark:border-green-600',
+      'rounded px-3 py-2 text-sm',
+    ].join(' ');
+
+    const span = document.createElement('span');
+    span.textContent = '✅ ' + text;
+
+    const btn = document.createElement('button');
+    btn.textContent = 'Remove';
+    btn.className = 'text-xs text-white bg-red-500 hover:bg-red-600 px-2 py-0.5 rounded transition ml-2 flex-shrink-0';
+    btn.addEventListener('click', () => {
+      li.remove();
+      if (selectedList.children.length === 0) selectedEmpty.classList.remove('hidden');
+    });
+
+    li.appendChild(span);
+    li.appendChild(btn);
+    return li;
+  }
+
+  // Load 5 default locked items
+  defaultItems.forEach(item => itemList.appendChild(createLockedItem(item)));
+  updateCount();
+
+  function updateCount() {
+    const all = document.querySelectorAll('#item-list li');
+    const visible = [...all].filter(li => li.style.display !== 'none');
+    const q = document.getElementById('search-bar').value.trim();
+    document.getElementById('search-count').textContent = q
+      ? `Showing ${visible.length} of ${all.length} items`
+      : `${all.length} item${all.length !== 1 ? 's' : ''} in list`;
+  }
+
+  const facts = [
+    "The Virunga Massif contains 8 volcanoes — 3 in Rwanda, 4 in DRC, and 1 in Uganda.",
+    "Mount Karisimbi is Rwanda's highest peak at 4,507 metres above sea level.",
+    "Volcanoes National Park protects approximately one third of all remaining mountain gorillas.",
+    "The name 'Virunga' comes from the Kinyarwanda word 'ibirunga', meaning volcanoes.",
+    "Mount Bisoke has a beautiful crater lake at its summit at an altitude of 3,711m.",
+    "Dian Fossey conducted her famous gorilla research at Karisoke, between Karisimbi and Bisoke.",
+  ];
+  let factIndex = 0;
+  document.getElementById('change-text-btn').addEventListener('click', () => {
+    factIndex = (factIndex + 1) % facts.length;
+    document.getElementById('paragraph-text').textContent = facts[factIndex];
+  });
+
+  document.getElementById('display-btn').addEventListener('click', () => {
+    const val = document.getElementById('user-input').value.trim();
+    document.getElementById('display-output').textContent = val || 'Please enter something first.';
+  });
+
+  document.getElementById('add-btn').addEventListener('click', addListItem);
+  document.getElementById('list-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') addListItem();
+  });
+
+  function addListItem() {
+    const val = document.getElementById('list-input').value.trim();
+    if (!val) return;
+    itemList.appendChild(createRemovableItem(val));
+    document.getElementById('list-input').value = '';
+    updateCount();
+  }
+
+  document.getElementById('search-bar').addEventListener('input', function () {
+    const q = this.value.toLowerCase();
+    document.querySelectorAll('#item-list li').forEach(li => {
+      li.style.display = li.dataset.name.includes(q) ? '' : 'none';
+    });
+    updateCount();
+  });
+
+  function addActivity(name) {
+    itemList.appendChild(createRemovableItem(name));
+    updateCount();
+    selectedEmpty.classList.add('hidden');
+    selectedList.appendChild(createSelectedItem(name));
+    document.getElementById('selected-list').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+
+  const navLinks = document.querySelectorAll('.nav-link:not(#dropdown-toggle)');
+  navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.forEach(l => l.classList.remove('bg-green-900'));
+      link.classList.add('bg-green-900');
+    });
+  });
+
+  document.getElementById('dropdown-toggle').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('dropdown-menu').classList.toggle('hidden');
+  });
+
+  document.getElementById('hamburger').addEventListener('click', () => {
+    const nav = document.getElementById('nav-links');
+    nav.classList.toggle('hidden');
+    nav.classList.toggle('flex');
+  });
+
+  const themeBtn = document.getElementById('theme-toggle');
+  themeBtn.addEventListener('click', () => {
+    document.documentElement.classList.toggle('dark');
+    themeBtn.textContent = document.documentElement.classList.contains('dark')
+      ? '☀️ Light Mode' : '🌙 Dark Mode';
+  });
+</script>
+
+</body>
+</html>
